@@ -16,7 +16,10 @@
           <el-tabs style="height:100%">
             <el-tab-pane>
               <div slot="label">通知公告</div>
-              <div class="article-title display">
+              <div class="article-title display"
+                   v-for="(item,index) in notice"
+                   :key="index"
+                   @click="toDetail(item)">
                 <div class="title-left">
                   <span class="red-point"></span>
                   <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
@@ -26,76 +29,7 @@
                 </div>
 
               </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
 
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
-              <div class="article-title display">
-                <div class="title-left">
-                  <span class="red-point"></span>
-                  <span style="margin-left:3px">揭阳公共资源交易中心关于广州药品集团采购平台升哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈啊</span>
-                </div>
-                <div class="title-right">
-                  2020-07-31
-                </div>
-
-              </div>
             </el-tab-pane>
             <el-tab-pane label="中心动态">中心动态</el-tab-pane>
             <el-tab-pane label="政声传递">政声传递</el-tab-pane>
@@ -106,18 +40,15 @@
         </div>
         <div class="right">
 
-          <div @click="toSome('login')">
-            <img src="@/assets/image/home/main1.png"
+          <div @click="toSome('login')"
+               v-for="(item,index) in login"
+               @mouseover="over (item,index,'main') "
+               @mouseout="out(item,index,'main')"
+               :key="index">
+            <img :src="item.url"
                  alt="登录">
           </div>
-          <div @click="toSome('register')">
-            <img src="@/assets/image/home/main2.png"
-                 alt="注册">
-          </div>
-          <div @click="toSome('guang')">
-            <img src="@/assets/image/home/main3.png"
-                 alt="广东政务网">
-          </div>
+
         </div>
       </div>
       <div class="second-step display">
@@ -127,26 +58,37 @@
         <div class="logo-push">
           <div class="push-top display align">
             <div class="logo-one"
+                 @mouseover="over (item,index,'push') "
+                 @mouseout="out(item,index,'push')"
                  v-for="(item,index) in logoDataTop"
                  :key="index">
-              <img :src="item.url"
-                   alt="">
+              <div>
+                <img :src="item.url"
+                     alt="">
 
-              <div class="logon-one-text">
-                {{item.name}}
+                <div class="logon-one-text">
+                  {{item.name}}
+                </div>
               </div>
+
             </div>
 
           </div>
           <div class="push-bottom display align">
 
             <div class="logo-one"
+                 :class="{'four':index===0,'five':index===1}"
                  v-for="(item,index) in logoDataBottom"
+                 @mouseover="over (item,index+4,'push') "
+                 @mouseout="out(item,index+4,'push')"
                  :key="index">
-              <img :src="item.url"
-                   alt="">
-              <div class="logon-one-text">
-                {{item.name}}
+              <div>
+                <img :src="item.url"
+                     alt="">
+
+                <div class="logon-one-text">
+                  {{item.name}}
+                </div>
               </div>
             </div>
           </div>
@@ -163,6 +105,9 @@
       </div>
 
     </div>
+
+    <advertising></advertising>
+    <card></card>
   </div>
 </template>
 
@@ -171,10 +116,19 @@ import tabs from '@/components/tabs'
 
 import myMap from '@/components/map'
 import toDo from './main-make-up/toDo'
+import advertising from './main-make-up/advertising'
+import card from './main-make-up/card'
 export default {
   data () {
     return {
       title: '办事工具',
+      notice: [{}, {}, {}, {}, {}, {}, {}, {},],
+      login: [
+
+        { name: '登录', url: require('@/assets/image/home/main1.png'), jump: 'login' },
+        { name: '注册', url: require('@/assets/image/home/main2.png'), jump: 'register' },
+        { name: '广东政务服务网', url: require('@/assets/image/home/main3.png'), jump: 'guang' },
+      ],
       logoDataTop: [
         { name: '政府采购', url: require('@/assets/image/home/push1.png') },
         { name: '政府采购', url: require('@/assets/image/home/push2.png') },
@@ -194,7 +148,9 @@ export default {
   components: {
     tabs,
     toDo,
-    myMap
+    myMap,
+    advertising,
+    card
   },
   created () {
 
@@ -205,6 +161,14 @@ export default {
 
   },
   methods: {
+    over (item, index, name) {
+      let num = index + 1
+      item.url = require('@/assets/image/home/' + name + num + 'B.png')
+    },
+    out (item, index, name) {
+      let num = index + 1
+      item.url = require('@/assets/image/home/' + name + num + '.png')
+    },
     toSome (key) {
       switch (key) {
         case 'login':
@@ -221,6 +185,9 @@ export default {
     },
     jump () {
       this.$router.push('/notice')
+    },
+    toDetail (item) {
+      this.$router.push('/noticeDetail?id=' + item.id)
     }
   }
 }
@@ -258,6 +225,10 @@ export default {
 .article-title {
   height: 37.5px;
   align-items: flex-end;
+  cursor: pointer;
+}
+.title-left:hover {
+  color: #3854b8;
 }
 .red-point {
   width: 6px;
@@ -285,6 +256,9 @@ export default {
   width: 234px;
   height: 100%;
   overflow: hidden;
+}
+.right > div {
+  cursor: pointer;
 }
 .right > div:nth-child(1) {
   height: 80px;
@@ -327,13 +301,35 @@ export default {
 }
 .logo-one {
   width: 25%;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-top: 12px;
+}
+.logo-one > div {
   text-align: center;
+}
+.logo-one:hover {
+  background-color: #3753b7;
+  color: #fff;
+}
+
+.logo-one.four:hover {
+  background-color: #2989c7;
+  color: #fff;
+}
+.logo-one.five:hover {
+  background-color: #4779e3;
+  color: #fff;
 }
 .logon-one-text {
   margin: 14px;
 }
 .main {
   margin-top: 20px;
+  position: relative;
 }
 </style>
 <style>

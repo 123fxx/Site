@@ -12,16 +12,22 @@
 import myHeader from './makeUp/header'
 
 import myFooter from './makeUp/footer'
+
 export default {
   components: {
     myHeader,
-    myFooter
+    myFooter,
+
   },
   data () {
     return {
 
-      data: {}
+      data: {},
+      path: ''
     }
+  },
+  created () {
+    this.path = this.$route.path
   }
 }
 </script>

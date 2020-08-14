@@ -181,6 +181,9 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.tr-left:hover {
+  color: #3753b7;
+}
 .warning {
   background: #f7b751;
 }

@@ -1,0 +1,196 @@
+<template>
+  <div class="card">
+    <div class="appeal"
+         v-if="appeal">
+
+      <div class="appeal-head display align">
+        <span>
+          揭阳市纪委第三派驻纪检组
+        </span>
+        <span @click="appeal=false">
+          <img src="@/assets/image/home/close2.png"
+               alt="">
+        </span>
+      </div>
+
+      <div class="appeal-contain">
+        <div>
+          <span>举报电话</span>
+          <span>0663-8339608</span>
+        </div>
+        <div>
+          <span>电子邮箱</span>
+          <span>jysjw3z@163.com</span>
+        </div>
+        <div>
+          <span>通讯地址</span>
+          <span>大院市纪委第三派驻纪检组</span>
+        </div>
+
+        <div>
+          <span>邮政编码</span>
+          <span>522010</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="tender"
+         v-if="myTender">
+      <div class="appeal-head display align">
+        <span>
+          揭阳市工程项目招投标
+        </span>
+        <span @click="myTender=false">
+          <img src="@/assets/image/home/close2.png"
+               alt="">
+        </span>
+      </div>
+
+      <div class="tender-contain">
+        <div>
+          <span>领域营商环境</span>
+          <span>专项整治线索征集</span>
+        </div>
+        <div>
+          <span class="img"><img src="@/assets/image/home/email.png"
+                 alt=""></span>
+          <span class="email">
+            yjggzyzhb@163.com
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      myTender: true,
+      appeal: true,
+
+    }
+  }
+}
+</script>
+
+<style scoped>
+.card {
+  position: absolute;
+
+  top: 22px;
+  right: 22px;
+}
+.appeal {
+  width: 260px;
+  height: 260px;
+}
+.appeal-head {
+  height: 40px;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(61, 161, 237, 1);
+  color: #fff;
+  border-radius: 4px 4px 0px 0px;
+}
+.appeal-contain {
+  background: rgba(255, 255, 255, 1);
+  padding: 14px;
+  border: 1px solid rgba(61, 161, 237, 1);
+  border-radius: 0px 0px 4px 4px;
+}
+.appeal-contain > div {
+  margin-top: 14px;
+}
+.appeal-contain > div:nth-child(1) {
+  margin-top: 0;
+}
+
+.appeal-contain > div > span:nth-child(1) {
+  display: inline-block;
+  width: 80px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background: #3da1ed;
+  color: #fff;
+}
+
+.appeal-contain > div > span:nth-child(2) {
+  color: #000;
+  margin-left: 3px;
+}
+
+.tender {
+  width: 260px;
+  height: 128px;
+  margin-top: 30px;
+
+  border-radius: 4px;
+  color: #000;
+  background-color: #fff;
+  border-top: none;
+}
+
+.tender-contain {
+  padding: 16px 13px;
+  background: #fff;
+
+  border: 1px solid rgba(61, 161, 237, 1);
+  border-radius: 0px 0px 4px 4px;
+}
+.tender-contain > div:nth-child(1) > span:nth-child(2) {
+  margin-left: 15px;
+}
+.tender-contain > div:nth-child(2) {
+  margin-top: 20px;
+}
+.email {
+  margin-left: 10px;
+}
+
+@media screen and (max-width: 1824px) {
+  .card {
+    right: 0;
+  }
+  .appeal,
+  .tender {
+    width: 130px;
+    overflow: hidden;
+    height: auto;
+    font-size: 12px;
+  }
+  .tender-contain {
+    padding: 8px 6px;
+  }
+  .tender-contain > div:nth-child(1) > span {
+    display: block;
+  }
+  .tender-contain > div:nth-child(1) > span:nth-child(2) {
+    margin-left: 0;
+  }
+
+  .tender-contain > div:nth-child(2) {
+    margin-top: 10px;
+  }
+  .appeal-contain > div > span:nth-child(1) {
+    display: inline;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    background: #fff;
+    color: #000;
+  }
+  .img {
+    text-align: center;
+    display: block;
+  }
+  .appeal-head {
+    font-size: 12px;
+  }
+  .email {
+    margin-left: 0;
+  }
+}
+</style>

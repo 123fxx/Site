@@ -15,9 +15,10 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import "@/assets/css/reset.css";
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import "@/assets/css/reset.css";
 import epfTitle from '@/components/title'
 import epfNav from '@/components/nav'
 import echarts from 'echarts' //引入echarts

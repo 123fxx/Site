@@ -64,42 +64,23 @@
       <div class="guide_bd">
         <div class="guide_bdleft">
           <ul>
-            <li>
+            <li v-for="(item,index) in toToData"
+                :key="index"
+                @mouseover="over (item,index) "
+                @mouseout="out(item,index)">
               <div>
 
-                <img src="@/assets/image/home/guide.png"
+                <img :src="item.url"
                      alt />
-                <p>服务指南</p>
+                <p>{{item.name}}</p>
               </div>
 
             </li>
-            <li>
-              <div>
 
-                <img src="@/assets/image/home/guide.png"
-                     alt />
-                <p>交易流程</p>
-              </div>
-
-            </li>
-            <li>
-              <div>
-                <img src="@/assets/image/home/transaction.png"
-                     alt />
-                <p>业务咨询</p>
-              </div>
-            </li>
-            <li>
-              <div>
-                <img src="@/assets/image/home/report.png"
-                     alt />
-                <p>投诉举报</p>
-              </div>
-            </li>
           </ul>
         </div>
         <div class="guide_bdright">
-          <v-Map :coordinate="'0,0'"></v-Map>
+          <v-Map></v-Map>
         </div>
       </div>
     </div>
@@ -118,10 +99,27 @@ export default {
     proportion,
   },
   data () {
-    return {};
+    return {
+      toToData: [
+        { name: '服务指南', url: require('@/assets/image/home/todo1.png') },
+        { name: '交易流程', url: require('@/assets/image/home/todo2.png') },
+        { name: '业务咨询', url: require('@/assets/image/home/todo3.png') },
+        { name: '投诉举报', url: require('@/assets/image/home/todo4.png') },
+      ]
+    };
   },
   mounted () { },
-  methods: {},
+  methods: {
+
+    over (item, index) {
+      let num = index + 1
+      item.url = require('@/assets/image/home/todo' + num + 'B.png')
+    },
+    out (item, index) {
+      let num = index + 1
+      item.url = require('@/assets/image/home/todo' + num + '.png')
+    },
+  },
 };
 </script>
 
@@ -270,12 +268,16 @@ i {
   width: 25%;
   height: 240px;
   margin-right: 10px;
-  color: #ffffff;
-  background-color: #3854b8;
+  background-color: #f7f7fb;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.guide_bdleft li:hover {
+  color: #ffffff;
+  background-color: #3854b8;
 }
 .guide_bdleft img {
   width: 72px;

@@ -112,3 +112,7 @@ textarea {
 .color {
   color: #3753B7;
 }
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #3753B7;
+}

@@ -57,9 +57,9 @@
           <div v-for="(item,index) in nav"
                :key="index"
                class="nav-content-one display align justify"
-               :class="{'active':item===navActive}"
+               :class="{'active':item.name===navActive}"
                @click="navClick(item)">
-            {{item}}
+            {{item.name}}
 
           </div>
         </div>
@@ -93,7 +93,17 @@ export default {
       },
       input4: '',
       datetime: '',
-      nav: ['首页', '交易信息', '政策法规', '政务公开', '资料下载', '诚信体系', '操作手册'],
+      nav: [
+        { name: '首页', path: '/' },
+        { name: '交易信息', path: '/' },
+        { name: '政策法规', path: '/' },
+        { name: '政务公开', path: '/' },
+        { name: '资料下载', path: '/' },
+        { name: '诚信体系', path: '/' },
+        { name: '操作手册', path: '/' },
+
+
+      ],
       navActive: '首页'
     }
   },
@@ -110,7 +120,9 @@ export default {
   },
   methods: {
     navClick (item) {
-      this.navActive = item
+      this.navActive = item.name;
+      this.$router.push(item.path)
+
     },
     getWeather (val) {
       this.$axios.get('https://www.tianqiapi.com/api/?version=v1&city=揭阳&appid=23443729&appsecret=RyCI1McN').then(res => {
