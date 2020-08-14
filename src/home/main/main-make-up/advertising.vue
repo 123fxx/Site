@@ -3,7 +3,7 @@
        id="advertising"
        @mouseover="over"
        @mouseout="out"
-       v-if="advertising">
+       v-if="$store.state.advertising">
     <div class="advertising-child">
       <p>1.关于投标人数字证书和电子签证的通知</p>
       <p>2.招投标系统登录设置的通知</p>
@@ -30,6 +30,9 @@ export default {
   },
   mounted () {
     let that = this
+    if (!this.$store.state.advertising) {
+      return
+    }
     this.ele = document.getElementById("advertising");
     // this.itl = window.setInterval(that.float, 20);
     this.itl = window.setInterval(function () {
@@ -73,7 +76,7 @@ export default {
     },
     close () {
       let that = this
-      this.advertising = false
+      this.$store.commit('close_advertising')
       window.clearInterval(that.itl);
     },
   },
@@ -115,16 +118,5 @@ export default {
   top: 0;
   background: url("../../../assets/image/home/close1.png") no-repeat center
     center;
-}
-
-@media screen and (min-width: 1920) {
-  body {
-    background-color: yellow;
-  }
-}
-@media screen and (min-width: 1366) {
-  body {
-    background-color: yellow;
-  }
 }
 </style>

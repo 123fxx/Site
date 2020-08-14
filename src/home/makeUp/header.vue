@@ -101,8 +101,6 @@ export default {
         { name: '资料下载', path: '/' },
         { name: '诚信体系', path: '/' },
         { name: '操作手册', path: '/' },
-
-
       ],
       navActive: '首页'
     }
@@ -120,6 +118,10 @@ export default {
   },
   methods: {
     navClick (item) {
+      if (this.$store.state.tabs.length > 1) {
+        this.$store.commit('init_tabs')
+      }
+
       this.navActive = item.name;
       this.$router.push(item.path)
 

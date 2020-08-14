@@ -1,13 +1,13 @@
 <template>
   <div class="card">
     <div class="appeal"
-         v-if="appeal">
+         v-if="$store.state.card.appeal">
 
       <div class="appeal-head display align">
         <span>
           揭阳市纪委第三派驻纪检组
         </span>
-        <span @click="appeal=false">
+        <span @click="close('appeal')">
           <img src="@/assets/image/home/close2.png"
                alt="">
         </span>
@@ -35,12 +35,12 @@
 
     </div>
     <div class="tender"
-         v-if="myTender">
+         v-if="$store.state.card.tender">
       <div class="appeal-head display align">
         <span>
           揭阳市工程项目招投标
         </span>
-        <span @click="myTender=false">
+        <span @click="close('tender')">
           <img src="@/assets/image/home/close2.png"
                alt="">
         </span>
@@ -70,6 +70,11 @@ export default {
       myTender: true,
       appeal: true,
 
+    }
+  },
+  methods: {
+    close (key) {
+      this.$store.commit('close_card', key)
     }
   }
 }

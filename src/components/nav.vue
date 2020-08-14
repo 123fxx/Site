@@ -2,8 +2,10 @@
   <div class="nav display align">
     <div v-for="(item,index) in $store.state.tabs"
          :key="index">
-      <span :class="{'color':item.path===path}">
-        {{item.title}}
+      <span :class="{'color':item.path===path}"
+            class="nav-one"
+            @click="jump(item)">
+        {{item.name}}
       </span>
       <span v-if="index!==$store.state.tabs.length-1"
             class="mark">
@@ -24,7 +26,10 @@ export default {
     this.path = this.$route.path
   },
   methods: {
-
+    jump (item) {
+      this.$store.commit('delete_tabs', item)
+      this.$router.push(item.path)
+    }
   },
 }
 </script>
@@ -36,5 +41,8 @@ export default {
 }
 .mark {
   margin: 0 5px;
+}
+.nav-one {
+  cursor: pointer;
 }
 </style>

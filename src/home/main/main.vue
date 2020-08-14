@@ -184,6 +184,7 @@ export default {
       }
     },
     jump () {
+      this.$store.commit('add_tabs', { path: '/notice', name: '工作动态' })
       this.$router.push('/notice')
     },
     toDetail (item) {

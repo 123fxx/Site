@@ -59,6 +59,8 @@ export default {
   },
   methods: {
     toDetail (item) {
+      this.$store.commit('add_tabs', { path: '/noticeDetail', name: '揭阳公共资源交易中心关于广州药品集团采购平台' })
+
       this.$router.push('/noticeDetail?id=' + item.id)
     }
   }
