@@ -1,7 +1,10 @@
+import Vue from 'vue'
 import axios from "axios";
 import router from "../router";
 import baseUrl from "./config";
 import qs from "qs";
+
+Vue.prototype.$axios = axios
 import { Message, MessageBox } from "element-ui";
 // 创建axios实例
 const service = axios.create({

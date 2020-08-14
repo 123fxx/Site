@@ -1,13 +1,15 @@
 <template>
   <div id="tianMap">
-    <div id="mapDiv" class="mapDiv" ref="mapDiv"></div>
+    <div id="mapDiv"
+         class="mapDiv"
+         ref="mapDiv"></div>
   </div>
 </template>
 <script>
 import TMap from "./init";
 export default {
   props: ["coordinate"],
-  data() {
+  data () {
     return {
       T: "",
       map: "", //地图对象
@@ -25,14 +27,14 @@ export default {
       zoom: 12, //显示级别
     };
   },
-  mounted() {
+  mounted () {
     this.getPosition();
   },
   watch: {
     $route: "getPosition",
   },
   methods: {
-    getPosition() {
+    getPosition () {
       TMap.init()
         .then((T) => {
           this.T = T;
