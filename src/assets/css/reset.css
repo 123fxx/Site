@@ -116,3 +116,64 @@ textarea {
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #3753B7;
 }
+
+.el-table .el-table__header thead th {
+  background: #EAEFFF
+}
+
+.el-table .el-table__header {
+  border-top: 2px solid #3854B8;
+}
+
+.el-table thead {
+  color: #333;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background-color: #F7F8FB;
+}
+
+.el-table__body {
+  border-left: 1px solid #EAEFFF;
+  border-right: 1px solid #EAEFFF;
+  border-bottom: 1px solid #EAEFFF;
+}
+
+.el-table td, .el-table th {
+  padding: 9px 0;
+}
+
+.el-input__inner {
+  height: 32px;
+  line-height: 32px;
+  border-radius: 0;
+}
+
+.el-input__icon {
+  line-height: 32px;
+}
+
+.el-input {
+  width: auto;
+}
+
+.el-select-dropdown__item {
+  line-height: 24px;
+  height: 24px;
+}
+
+.el-table__body-wrapper {
+  height: calc(100% - 42px);
+}
+
+.el-dialog__header {
+  padding: 0;
+}
+
+.el-dialog__body {
+  padding: 0;
+}
+
+.el-table th>.cell {
+  text-align: center;
+}

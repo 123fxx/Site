@@ -1,13 +1,14 @@
 <template>
-  <div class="tabs">
+  <div class="tabs"
+       v-loading="loading">
     <div class="top display">
       <div class="tabs-title_big">
         <div class="tabs-title_small">
-          {{data.title}}
+          {{data.name}}
         </div>
       </div>
       <div class="tabs-head display">
-        <div v-for="(item,index) in data.head"
+        <div v-for="(item,index) in data.children"
              :key="index"
              class="tabs-head-one"
              @click="change(item)"
@@ -15,101 +16,295 @@
           <span>{{item.name}}</span>
         </div>
       </div>
-      <div style="margin-left:auto;color:#999999;padding-right:20px;cursor:pointer">
+      <div style="margin-left:auto;color:#999999;padding-right:20px;cursor:pointer"
+           @click="jump()">
         更多 > >
       </div>
     </div>
-    <div class="content">
+    <div class="content"
+         v-if="data.no==='003'||data.no==='004'">
       <div class="content-tr display"
            v-for="(item,index) in data.list"
-           :key="index">
+           :key="index"
+           @click="toDetail(item)">
         <div class="tr-left">
-          {{item.content}}
+          <span v-if="data.no==='003'&&item.target_type">
+            【{{item.target_type}}】
+          </span>
+          <span v-if="data.no==='004'&&item.target_type">
+            【{{item.target_type}}】
+          </span>
+          <span v-html="item.name">
+
+          </span>
         </div>
         <div class="tr-right display align">
-          <div class="state"
-               :class="{'warning':item.state==='进行中','common':item.state==='已结束'}">
-            {{item.state}}
-          </div>
+          <template v-if="no==='003001'||no==='004001'">
+            <div class="state end"
+                 v-if="item.status_name==='已结束'">
+              {{item.status_name}}
+            </div>
+            <div class="state warning"
+                 v-if="item.status_name==='进行中'">
+              {{item.status_name}}
+            </div>
+          </template>
           <div class="date">
-            {{item.date}}
+            {{item.info_time2}}
           </div>
+
+          <!-- <div class="state success"
+               v-if="item.trade_status===2">
+            已成交
+          </div>
+          <div class="state warning"
+               v-if="item.trade_status===0">
+            投保中
+          </div>
+          <div class="state ing"
+               v-if="item.trade_status===1">
+            正在开标
+          </div>
+          <div class="state end"
+               v-if="item.trade_status===3">
+            已流拍
+          </div>
+        -->
 
         </div>
       </div>
+    </div>
+    <div class="table"
+         v-if="data.no==='005'||data.no==='006'">
+      <el-table :data="data.list"
+                stripe
+                border
+                style="width: 100%">
+
+        <el-table-column v-for="(item,index) in tableHead"
+                         :key="index"
+                         :label="item.title"
+                         :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span @click="tabletoDetail(scope.row,item)"
+                  :class="{'table-content':item.prop==='name'}">{{ scope.row[item.prop] }}</span>
+          </template>
+        </el-table-column>
+
+      </el-table>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      data: {
-        title: '建设工程',
-        head: [{
-          id: '1',
-          name: '采购公告'
-        },
-        {
-          id: '1',
-          name: '采购公告2'
-        },
-        {
-          id: '1',
-          name: '采购公告3'
-        },
-        {
-          id: '1',
-          name: '采购公告4'
-        },
-        {
-          id: '1',
-          name: '采购公告5'
-        }],
-        list: [{
-          content: '【公开招标】广东省揭阳市人民检察院“档案数字化采购”项目公开招标采购公告正式项目公开招标采购公',
-          date: '2020-07-31',
-          state: '进行中'
-        },
-        {
-          content: '【公开招标】广东省揭阳市人民检察院“档案数字化采购”项目公开招标采购公告正式项目公开招标采购公',
-          date: '2020-07-31',
-          state: '进行中'
-        },
-        {
-          content: '【公开招标】广东省揭阳市人民检察院“档案数字化采购”项目公开招标采购公告正式项目公开招标采购公',
-          date: '2020-07-31',
-          state: '进行中'
-        },
-        {
-          content: '【公开招标】广东省揭阳市人民检察院“档案数字化采购”项目公开招标采购公告正式项目公开招标采购公',
-          date: '2020-07-31',
-          state: '进行中'
-        },
-        {
-          content: '【公开招标】广东省揭阳市人民检察院“档案数字化采购”项目公开招标采购公告正式项目公开招标采购公',
-          date: '2020-07-31',
-          state: '已结束'
-        }]
-      },
-      activeName: '采购公告'
+  props: {
+    data: {
+      type: Object,
+      default: function () {
+        return {
+          name: '',
+          id: '',
+          no: '',
+          children: ''
+        }
+      }
     }
   },
+  data () {
+    return {
+      no: '',
+      activeName: '',
+      loading: false,
+      tableHead: [{ title: '公告编号', prop: 'notice_no' },
+      { title: '公告时间', prop: 'notice_time' },
+      { title: '起始价', prop: 'begin_price' },
+      { title: '保证金', prop: 'earnest_money' },
+      { title: '土地位置', prop: 'address' },]
+    }
+  },
+  created () {
+  },
+  computed: {
+
+  },
   methods: {
+    toDetail (item) {
+      if (item.item_type === 1) {
+        this.getData(item.id)
+        return
+      }
+      const { href } = this.$router.resolve({
+        path: `noticeDetail`,
+        query: { name: item.name, id: item.id }
+      });
+      window.open(href, "_blank");
+    },
+    getData (id) {
+
+      this.$get(
+        '/ords/epfcms/cmsItem/queryCmsItemDetails/' + id,
+        {}
+      ).then(res => {
+        let data = res.items[0] || ''
+
+        if (!data) {
+          return
+
+        }
+
+        window.open(data.url);
+      })
+    },
+    tabletoDetail (row, item) {
+
+      let reg = /编号/
+      let reg2 = /名称/
+      if (reg.test(item.title) || reg2.test(item.title)) {
+        // this.$router.push({ path: '/noticeDetail', })
+
+
+        const { href } = this.$router.resolve({
+          path: `noticeDetail`,
+          query: { name: row.name, id: row.id }
+        });
+        window.open(href, "_blank");
+      }
+
+    },
     change (item) {
       this.activeName = item.name
+      this.getTabHead(item.no)
+      this.getList(item.no)
+      this.no = item.no
+
+    },
+    jump (item) {
+      // this.$store.commit('delete_keepAlive')
+
+      this.$router.push(
+        '/government?no=' + this.data.children[0].no + '&id=' + this.data.id + '&name=' + this.data.children[0].name)
+    },
+    getTabHead (no) {
+
+
+      switch (no) {
+        case '005005':
+          //土地及矿业权的交易公告
+          this.tableHead = [
+            { title: '公告编号', prop: 'name' },
+
+            // { title: '宗地编号', prop: 'trade_no' },
+            { title: '公告时间', prop: 'info_time2' },
+
+            { title: '保证金截止日期', prop: 'end_earnest_time' },
+            { title: '竞买申请截止日期', prop: 'end_apply_time' },
+            { title: '起始价', prop: 'begin_price' },
+            { title: '保证金', prop: 'earnest_money' },
+
+
+            // { title: '土地位置', prop: 'address' },
+          ]
+          break;
+
+        case '006001':
+          //国有产权的交易公告
+          this.tableHead = [
+            { title: '公告编号', prop: 'name' },
+            { title: '公告时间', prop: 'info_time2' },
+            { title: '保证金截止日期', prop: 'end_earnest_time' },
+            { title: '竞买申请截止日期', prop: 'end_apply_time' },
+            { title: '起始价', prop: 'begin_price' },
+            { title: '保证金', prop: 'earnest_money' },
+            // { title: '标的名称', prop: 'trade_name' },
+          ]
+          break;
+        case '005007':
+          //土地及矿业权的变更公告
+          this.tableHead = [
+            { title: '公告编号', prop: 'name' },
+
+            { title: '宗地编号', prop: 'trade_no' },
+            { title: '公告类型', prop: 'type' },
+            { title: '公告时间', prop: 'info_time2' },
+          ]
+          break;
+        case '005006':
+          //土地及矿业权的成交结果公示
+          this.tableHead = [
+            { title: '宗地编号', prop: 'name' },
+            { title: '起始价', prop: 'begin_price' },
+            { title: '成交价', prop: 'trans_price' },
+            { title: '成交时间', prop: 'end_trans_time' },
+            { title: '竞得人', prop: 'trans_bidder' },
+          ]
+          break;
+        case '006003':
+          //国有产权的变更公告
+          this.tableHead = [
+            { title: '公告编号', prop: 'name' },
+            { title: '标的名称', prop: 'trade_name' },
+            { title: '公告类型', prop: 'type' },
+            { title: '公告时间', prop: 'info_time2' },
+          ]
+          break;
+        case '006002':
+          //国有产权的成交结果公示
+          this.tableHead = [
+            { title: '标的名称', prop: 'name' },
+            { title: '起始价', prop: 'begin_price' },
+            { title: '成交价', prop: 'trans_price' },
+            { title: '成交时间', prop: 'end_trans_time' },
+            { title: '竞得人', prop: 'trans_bidder' },
+          ]
+          break;
+      }
+
+
+    },
+    getList (id) {
+
+      let params = {
+        row_offset: 1,
+        row_count: 5
+      }
+      this.loading = true
+      this.$get(
+        '/ords/epfcms/cmsItem/queryCmsItemBySeriesId/' + id,
+        params
+      ).then(res => {
+        this.data.list = res.items
+        // activeName
+        for (var i = 0; i < this.data.list.length; i++) {
+          this.$set(this.data.list[i], 'type', this.activeName)
+        }
+        this.loading = false
+      })
+    },
+  },
+  watch: {
+    'data.children': function (val) {
+      this.getTabHead(val[0].no)
+      this.getList(val[0].no)
+      this.no = val[0].no
+      this.activeName = JSON.parse(JSON.stringify(val[0].name))
+
     }
+
   }
 }
 </script>
 
 <style scoped>
 .tabs {
-  line-height: 44px;
+  /* line-height: 44px; */
+}
+.content {
+  line-height: 40px;
 }
 .top {
   height: 44px;
+  line-height: 44px;
   background: #f7f8fb;
 }
 .tabs-title_small {
@@ -160,6 +355,7 @@ export default {
   padding: 20px;
   border: 1px solid #e2e8ff;
   border-top: none;
+  min-height: 220px;
 }
 .content .content-tr {
   justify-content: space-between;
@@ -187,10 +383,25 @@ export default {
 .warning {
   background: #f7b751;
 }
-.common {
+.success {
+  background: #20be54;
+}
+.ing {
+  background: #14adf1;
+}
+.end {
   background: #999999;
 }
 .date {
   color: #999999;
+}
+.table {
+  margin-top: 10px;
+}
+.table-content {
+  cursor: pointer;
+}
+.table-content:hover {
+  color: #3753b7;
 }
 </style>

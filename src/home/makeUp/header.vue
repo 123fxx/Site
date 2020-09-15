@@ -25,22 +25,11 @@
           <div>
           </div>
         </div>
-        <div class="right">
-          <span>
-            分享至:
-          </span>
-          <span>
-            <img src="@/assets/image/home/icon1.png"
-                 alt="">
-          </span>
-          <span>
-            <img src="@/assets/image/home/icon2.png"
-                 alt="">
-          </span>
-          <span>
-            <img src="@/assets/image/home/icon3.png"
-                 alt="">
-          </span>
+        <div class="right display align">
+          <a @click="SetHome"
+             class="set"> 设为首页 </a>
+          / <span @click="collect"
+                class="set"> 加入收藏 </span>
         </div>
       </div>
 
@@ -65,11 +54,12 @@
         </div>
         <div class="nav-search display align">
           <el-input placeholder="请输入关键词"
-                    v-model="input4">
+                    v-model="input">
             <i slot="prefix"
                class="el-input__icon el-icon-search"></i>
           </el-input>
-          <div class="nav-button display align justify">
+          <div class="nav-button display align justify"
+               @click="jump">
             搜索
           </div>
         </div>
@@ -80,7 +70,10 @@
 </template>
 
 <script>
+
+
 import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -91,16 +84,17 @@ export default {
         air_tips: '',
         wea_img: ''
       },
-      input4: '',
+      input: '',
       datetime: '',
       nav: [
-        { name: '首页', path: '/' },
-        { name: '交易信息', path: '/' },
-        { name: '政策法规', path: '/' },
-        { name: '政务公开', path: '/' },
-        { name: '资料下载', path: '/' },
-        { name: '诚信体系', path: '/' },
-        { name: '操作手册', path: '/' },
+        { name: '首页', path: '/', query: {} },
+        { name: '政策法规', path: '/notice', query: { index: '1', id: '007002', name: '政府采购' }, },
+        { name: '政务公开', path: '/notice', query: { index: '2', id: '002001', name: '中心简介' }, },
+        { name: '资料下载', path: '/notice', query: { index: '3', id: '007002', name: '政府采购' }, },
+        { name: '诚信体系', url: 'http://xywz.jieyang.gd.cn/' },
+        { name: '操作手册', path: '/notice', query: { index: '4', id: '015001', name: '政府采购' }, },
+        { name: '服务咨询', path: '/cityMap', query: {} },
+        // { name: '操作手册', path: '/notice', query: { index: 5, id: '007002', name: '政府采购' }, top: 0 },
       ],
       navActive: '首页'
     }
@@ -109,6 +103,26 @@ export default {
 
   },
   created () {
+    let index = this.$route.query.index
+    switch (index) {
+      case '1':
+        this.navActive = '政策法规'
+        break;
+
+      case '2':
+        this.navActive = '政务公开'
+        break;
+      case '3':
+        this.navActive = '资料下载'
+        break;
+      case '4':
+        this.navActive = '操作手册'
+        break;
+      default:
+        this.navActive = '首页'
+        break;
+    }
+
 
     this.getWeather()
 
@@ -117,13 +131,93 @@ export default {
 
   },
   methods: {
-    navClick (item) {
-      if (this.$store.state.tabs.length > 1) {
-        this.$store.commit('init_tabs')
+    SetHome (obj) {
+
+      var url = document.location.href; if (document.all) { document.body.style.behavior = 'url(#default#homepage)'; document.body.setHomePage(url); }
+
+      else if (window.sidebar) {
+
+        if (window.netscape) {
+
+          try { netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect"); }
+
+          catch (e) { this.$message.warning("此操作被浏览器拒绝！\n请在浏览器地址栏输入“about:config”并回车\n然后将[signed.applets.codebase_principal_support]设置为'true'"); }
+
+        }
+
+
+
       }
 
+      else {
+
+        alert('您的浏览器不支持自动自动设置首页, 请使用浏览器菜单手动设置!');
+
+      }
+    },
+    collect () {
+      var url = window.location;
+      var title = document.title;
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.indexOf("msie 8") > -1) {
+        external.AddToFavoritesBar(url, title, '');//IE8
+      } else {
+        try {
+          window.external.addFavorite(url, title);
+        } catch (e) {
+          try {
+            window.sidebar.addPanel(title, url, "");//firefox
+          } catch (e) {
+            this.$message.warning("加入收藏失败，请使用Ctrl+D进行添加");
+          }
+        }
+      }
+    },
+    navClick (item) {
+
+      if (item.url) {
+        window.open(item.url)
+        return
+      }
+      let initData = {
+        path: item.path,
+        query: {
+          name: item.name,
+          index: item.query.index,
+          id: item.query.id
+        }
+      }
+
+      if (this.navActive === item.name && item.name !== '首页') {
+        return
+      }
+      let params = {
+        path: item.path,
+        query: item.query
+      }
+
+
+      if (item.name === '首页') {
+        this.$store.commit('init_tabs', item)
+        this.$router.push(params)
+        this.navActive = item.name;
+        return
+      }
+      this.$router.push(params)
       this.navActive = item.name;
-      this.$router.push(item.path)
+
+
+    },
+    jump () {
+      console.log(this.$route.path)
+      if (this.$route.path !== '/search') {
+        this.$router.push('/search')
+        this.$store.commit('add_tabs', { path: '/search', query: { name: '站内搜索' } })
+      }
+
+      this.$nextTick(function () {
+        this.$bus.$emit('search', this.input)
+      })
 
     },
     getWeather (val) {
@@ -134,6 +228,7 @@ export default {
         this.weather = res.data.data[0]
       });
     },
+
   }
 }
 </script>
@@ -142,6 +237,7 @@ export default {
 .header {
   height: 23px;
   background: #efefef;
+  line-height: 23px;
 }
 .area-contain {
   display: flex;
@@ -150,14 +246,15 @@ export default {
   align-items: center;
 }
 .weather-img {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
 }
 .banner {
   height: 140px;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+
+  background-position: center center;
 }
 .left,
 .right {
@@ -176,7 +273,11 @@ export default {
   font-size: 14px;
   font-weight: Bold;
 }
-
+.right > span {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 .nav-content-one {
   height: 50px;
   padding: 0 34px;
@@ -192,20 +293,17 @@ export default {
   height: 32px;
   background: #e22e2e;
 }
+.right img {
+  width: 16px;
+  height: 16px;
+}
+.right span {
+  cursor: pointer;
+  margin: 0 5px;
+}
 </style>
-<style >
+<style>
 .nav .el-input__inner {
-  height: 32px;
-  line-height: 32px;
-  width: 200px;
-  border-radius: 0;
-}
-
-.nav .el-input__icon {
-  line-height: 32px;
-}
-
-.nav .el-input {
-  width: auto;
+  width: 195px;
 }
 </style>

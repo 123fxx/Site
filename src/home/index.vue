@@ -1,8 +1,13 @@
 <template>
   <div class="app">
     <myHeader></myHeader>
-
-    <router-view></router-view>
+    <div class="area"
+         v-show="path!=='/government'&&path!=='/main'">
+      <epf-nav></epf-nav>
+    </div>
+    <keep-alive :include="$store.state.keepAlive">
+      <router-view></router-view>
+    </keep-alive>
 
     <myFooter></myFooter>
   </div>
@@ -22,13 +27,36 @@ export default {
   data () {
     return {
 
-      data: {},
-      path: ''
+      data: [],
+      path: '',
+
     }
   },
   created () {
     this.path = this.$route.path
-  }
+    let that = this
+    // window.addEventListener("popstate", function (e) {
+
+    //   that.$store.commit('back_tabs', that.data)
+    // }, false);
+
+  },
+  computed: {
+
+
+
+  },
+
+  watch: {
+    $route (to) {
+      console.log(to)
+      this.path = to.path
+    }
+  },
+
+  methods: {
+
+  },
 }
 </script>
 

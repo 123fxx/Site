@@ -1,47 +1,51 @@
 <template>
   <div class="home">
-
-    <div class="transaction w">
+    <!-- <div class="transaction w">
       <epf-title :title="'交易数据'"></epf-title>
       <div class="tran_bd">
         <div class="statistics tran_box">
           <h3>
-            <span>2020年公告统计</span>
+            <span>{{year}}年公告统计</span>
           </h3>
           <div class="release">
             <div class="release_left">
               <p>发布公告</p>
-              <i>78</i>（宗）
+              <i>{{toDOData.publish_count}}</i>（宗）
             </div>
             <div class="release_right">
               <p>成交结果</p>
-              <i>32</i>（宗）
-              <div class="bor"></div>
+              <i>{{toDOData.trans_count}}</i>
+              （宗）
             </div>
           </div>
           <h3>
-            <span>2020年交易情况统计</span>
+            <span>{{year}}年交易情况统计</span>
           </h3>
           <div class="yeardeal">
             <div>
-              <span>2020年交易数</span>
+              <span>{{year}}年交易数</span>
               <i>（宗）</i>
-              <p>2346345566</p>
+              <p>{{toDOData.trans_count}}</p>
             </div>
-            <div>
-              <span>2020年交易额</span>
+            <div v-if="toDOData.trans_price_sum1 > 9999">
+              <span>{{year}}年交易额</span>
               <i>（亿元）</i>
-              <p>3425678.23</p>
+              <p>{{toDOData.trans_price_sum2}}</p>
+            </div>
+            <div v-else>
+              <span>{{year}}年交易额</span>
+              <i>（万元）</i>
+              <p>{{toDOData.trans_price_sum1}}</p>
             </div>
             <div>
               <span>节约资金</span>
-              <i>（亿元）</i>
-              <p>45.6</p>
+              <i>（万元）</i>
+              <p>{{toDOData.economize_price_sum}}</p>
             </div>
             <div>
               <span>增值金额</span>
-              <i>（亿元）</i>
-              <p>345.2</p>
+              <i>（万元）</i>
+              <p>{{toDOData.increment_price_sum}}</p>
             </div>
           </div>
         </div>
@@ -58,66 +62,115 @@
           <proportion></proportion>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="guide w">
-      <epf-title :title="'办事指南'"></epf-title>
+
       <div class="guide_bd">
         <div class="guide_bdleft">
-          <ul>
-            <li v-for="(item,index) in toToData"
-                :key="index"
-                @mouseover="over (item,index) "
-                @mouseout="out(item,index)">
-              <div>
-
-                <img :src="item.url"
-                     alt />
-                <p>{{item.name}}</p>
-              </div>
-
-            </li>
-
-          </ul>
+          <img src="@/assets/image/home/mapLeft.png"
+               alt="">
         </div>
-        <div class="guide_bdright">
-          <v-Map></v-Map>
+        <div class="guide_bdright"
+             @click="toMap">
+
+          <img src="@/assets/image/home/map.jpg"
+               style="width:100%;height:240px"
+               alt />
+
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import Map from "@/components/map";
 import trends from "./homeEcharts/trends";
 import proportion from "./homeEcharts/proportion";
 export default {
   components: {
-    "v-Map": Map,
     trends,
     proportion,
   },
   data () {
     return {
       toToData: [
-        { name: '服务指南', url: require('@/assets/image/home/todo1.png') },
-        { name: '交易流程', url: require('@/assets/image/home/todo2.png') },
-        { name: '业务咨询', url: require('@/assets/image/home/todo3.png') },
-        { name: '投诉举报', url: require('@/assets/image/home/todo4.png') },
-      ]
+        {
+          name: "服务指南",
+          url: require("@/assets/image/home/todo1.png"),
+          id: "008",
+          eng: "FWZN",
+        },
+        {
+          name: "交易流程",
+          url: require("@/assets/image/home/todo2.png"),
+          id: "016",
+          eng: "JYLC",
+        },
+        {
+          name: "业务咨询",
+          url: require("@/assets/image/home/todo3.png"),
+          id: "000004",
+        },
+        {
+          name: "投诉举报",
+          url: require("@/assets/image/home/todo4.png"),
+          id: "000005",
+        },
+      ],
+      toDOData: {
+        publish_count: 0,
+        trans_count: 0,
+        trans_price_sum1: 0,
+        trans_price_sum2: 0,
+        economize_price_sum: 0,
+        increment_price_sum: 0,
+      },
+      year: "2020",
     };
   },
   mounted () { },
+  created () {
+    let date = new Date();
+    this.year = date.getFullYear();
+    this.toDoQuery();
+  },
   methods: {
-
+    toMap () {
+      this.$router.push('cityMap')
+    },
     over (item, index) {
-      let num = index + 1
-      item.url = require('@/assets/image/home/todo' + num + 'B.png')
+      let num = index + 1;
+      item.url = require("@/assets/image/home/todo" + num + "B.png");
     },
     out (item, index) {
-      let num = index + 1
-      item.url = require('@/assets/image/home/todo' + num + '.png')
+      let num = index + 1;
+      item.url = require("@/assets/image/home/todo" + num + ".png");
+    },
+
+    jump (item) {
+
+
+      let params = {
+        path: "/notice",
+        query: {
+          name: item.name,
+          index: "6",
+          id: item.id,
+          eng: item.eng,
+        },
+      };
+      this.$store.commit("add_tabs", params);
+      this.$router.push(params);
+    },
+    toDoQuery () {
+      this.$axios
+        .get("/api/ords/epfcms/trade/queryTradeTransData")
+        .then((res) => {
+          if (res.status !== 200) {
+            return;
+          }
+          this.toDOData = res.data;
+        });
     },
   },
 };
@@ -158,7 +211,7 @@ i {
 }
 .tran_bd {
   display: flex;
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
 }
 .tran_box {
   width: 32%;
@@ -187,10 +240,11 @@ i {
   display: flex;
   margin: 20px 10px 10px 10px;
   height: calc(40% - 41px);
+  background: url("../../../assets/image/home/back.png") no-repeat center center;
+  background-size: 100% 100%;
 }
 .release_left {
   width: 177px;
-  background: rgba(82, 118, 233, 1);
 }
 .release_left,
 .release_right {
@@ -211,18 +265,8 @@ i {
 .release_right {
   position: relative;
   width: 198px;
-  background: #3854b8;
 }
-.release_right .bor {
-  position: absolute;
-  top: 0;
-  left: -25px;
-  width: 0;
-  height: 0;
-  border-color: transparent #3854b8 transparent transparent;
-  border-style: solid;
-  border-width: 102px 25px 0 0;
-}
+
 .yeardeal {
   display: flex;
   flex-wrap: wrap;
@@ -255,47 +299,17 @@ i {
   font-size: 20px;
 }
 .guide_bd {
-  margin: 20px 0px;
+  margin: 20px 0 10px 0;
   display: flex;
 }
 .guide_bdleft {
-  width: 75%;
-}
-.guide_bdleft ul {
-  display: flex;
-}
-.guide_bdleft li {
-  width: 25%;
-  height: 240px;
-  margin-right: 10px;
-  background-color: #f7f7fb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  width: 862px;
 }
 
-.guide_bdleft li:hover {
-  color: #ffffff;
-  background-color: #3854b8;
-}
-.guide_bdleft img {
-  width: 72px;
-  height: 72px;
-}
-.guide_bdleft div {
-  text-align: center;
-}
-.guide_bdleft a {
-  color: #ffffff;
-}
-.guide_bdleft p {
-  margin-top: 20px;
-}
 .guide_bdright {
-  width: 25%;
+  width: 319px;
   height: 240px;
-  margin-left: 15px;
+  margin-left: 19px;
   background-color: #f7f8fb;
 }
 /* 尾部开始 */

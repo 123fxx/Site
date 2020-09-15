@@ -5,8 +5,13 @@
        @mouseout="out"
        v-if="$store.state.advertising">
     <div class="advertising-child">
-      <p>1.关于投标人数字证书和电子签证的通知</p>
-      <p>2.招投标系统登录设置的通知</p>
+      <p v-for="(item,index) in list"
+         :key="index"
+         style="cursor:pointer">
+        <span @click="toDetail(item)"> {{index+1}}{{item.name}}</span>
+
+      </p>
+
     </div>
     <div class="close"
          @click="close"></div>
@@ -25,8 +30,12 @@ export default {
       delay: 20,
       xin: true,
       yin: true,
-      ele: null
+      ele: null,
+      list: []
     }
+  },
+  created () {
+    this.getList()
   },
   mounted () {
     let that = this
@@ -39,7 +48,26 @@ export default {
       that.float()
     }, 20)
   },
+
   methods: {
+    toDetail (item) {
+      const { href } = this.$router.resolve({
+        path: `noticeDetail`,
+        query: { name: item.name, id: item.id }
+      });
+      window.open(href, "_blank");
+    },
+    getList () {
+
+
+      this.$get(
+        '/ords/epfcms/cmsItem/queryCmsItemFloat',
+        {}
+      ).then(res => {
+        this.list = res.items
+
+      })
+    },
     over () {
       let that = this
       window.clearInterval(that.itl);
@@ -49,7 +77,7 @@ export default {
       this.itl = setInterval(that.float, that.delay);
     },
     float () {
-      console.log(1)
+
       var L = 0; var T = 0;
       var R = document.documentElement.clientWidth - this.ele.offsetWidth;
       var B = document.documentElement.clientHeight - this.ele.offsetHeight;
@@ -90,7 +118,7 @@ export default {
 <style scoped>
 .advertising {
   width: 318px;
-  height: 132px;
+
   position: absolute;
   top: 254px;
   left: 33px;
@@ -99,7 +127,7 @@ export default {
 
 .advertising-child {
   width: 300px;
-  height: 114px;
+
   padding: 20px 15px;
   background: #3ca0ee;
   color: #f7d30f;
